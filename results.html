@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://images.pexels.com; style-src 'self' https://cdnjs.cloudflare.com 'unsafe-inline'; script-src 'self'; font-src 'self' https://cdnjs.cloudflare.com;">
+    <title>Analysis Results - OSINT Analysis Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-search-plus"></i>
+                <span>OSINT Analyzer</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="upload.html"><i class="fas fa-upload"></i> Upload</a></li>
+                <li><a href="results.html" class="active"><i class="fas fa-chart-bar"></i> Results</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="results-page">
+        <div class="results-container">
+            <aside class="results-sidebar">
+                <div class="search-section">
+                    <h3>Search & Filter</h3>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search results..." aria-label="Search results">
+                    </div>
+                    <div class="filter-section">
+                        <h4>Filter By:</h4>
+                        <select id="fileTypeFilter" aria-label="Filter by file type">
+                            <option value="all">All File Types</option>
+                            <option value="image">Images</option>
+                            <option value="rf">RF Spectrum</option>
+                            <option value="document">Documents</option>
+                        </select>
+                        <select id="dateFilter" aria-label="Filter by date">
+                            <option value="all">All Dates</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                        </select>
+                        <div class="rf-filter" id="rfFilter">
+                            <h4>RF Spectrum Range:</h4>
+                            <div class="range-inputs">
+                                <input type="number" id="freqMin" placeholder="Min MHz" min="0" max="6000">
+                                <span>-</span>
+                                <input type="number" id="freqMax" placeholder="Max MHz" min="0" max="6000">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <section class="results-main">
+                <div class="results-header">
+                    <h1>Analysis Results</h1>
+                    <button id="exportBtn" class="export-button">
+                        <i class="fas fa-download"></i> Export Results
+                    </button>
+                </div>
+
+                <div class="results-grid" id="resultsGrid">
+                    <!-- Results will be dynamically populated here -->
+                    <div class="no-results" id="noResults">
+                        <i class="fas fa-search"></i>
+                        <p>No analysis results found. Upload files to begin analysis.</p>
+                        <a href="upload.html" class="cta-button">Upload Files</a>
+                    </div>
+                </div>
+
+                <template id="imageResultTemplate">
+                    <article class="result-card image-result">
+                        <div class="result-preview">
+                            <img src="" alt="Image preview">
+                        </div>
+                        <div class="result-details">
+                            <h3 class="file-name"></h3>
+                            <div class="metadata-section">
+                                <h4>Metadata</h4>
+                                <dl class="metadata-list">
+                                    <!-- Metadata will be populated here -->
+                                </dl>
+                            </div>
+                            <div class="analysis-section">
+                                <h4>Analysis</h4>
+                                <div class="analysis-content">
+                                    <!-- Analysis results will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </template>
+
+                <template id="rfResultTemplate">
+                    <article class="result-card rf-result">
+                        <div class="result-preview">
+                            <canvas class="rf-canvas"></canvas>
+                        </div>
+                        <div class="result-details">
+                            <h3 class="file-name"></h3>
+                            <div class="rf-analysis">
+                                <h4>RF Spectrum Analysis</h4>
+                                <div class="frequency-bands">
+                                    <!-- Frequency bands will be populated here -->
+                                </div>
+                                <div class="signal-patterns">
+                                    <!-- Signal patterns will be populated here -->
+                                </div>
+                            </div>
+                            <div class="interpretation">
+                                <h4>Interpretation</h4>
+                                <p class="interpretation-text"></p>
+                            </div>
+                        </div>
+                    </article>
+                </template>
+
+                <template id="documentResultTemplate">
+                    <article class="result-card document-result">
+                        <div class="result-preview">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="result-details">
+                            <h3 class="file-name"></h3>
+                            <div class="content-preview">
+                                <h4>Content Preview</h4>
+                                <pre class="content-text"></pre>
+                            </div>
+                            <div class="entities-section">
+                                <h4>Detected Entities</h4>
+                                <div class="entities-list">
+                                    <!-- Entities will be populated here -->
+                                </div>
+                            </div>
+                            <div class="sentiment-section">
+                                <h4>Sentiment Analysis</h4>
+                                <div class="sentiment-indicator">
+                                    <!-- Sentiment will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </template>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="privacy-notice">
+                <h4>Privacy Notice</h4>
+                <p>Files are processed client-side and temporarily stored server-side. All files are deleted after processing.</p>
+            </div>
+            <div class="contact-info">
+                <h4>Contact</h4>
+                <p>For support: <a href="mailto:support@osintanalyzer.com">support@osintanalyzer.com</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
