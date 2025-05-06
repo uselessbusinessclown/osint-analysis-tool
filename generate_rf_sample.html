@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate RF Sample</title>
+</head>
+<body>
+    <canvas id="rfCanvas" width="800" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById('rfCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Create gradient background (time vs frequency)
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, '#000033');
+        gradient.addColorStop(1, '#000066');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw RF signals
+        function drawSignal(x, intensity, width) {
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, `rgba(255, 0, 0, ${intensity})`);
+            gradient.addColorStop(0.5, `rgba(255, 255, 0, ${intensity})`);
+            gradient.addColorStop(1, `rgba(0, 255, 0, ${intensity})`);
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(x - width/2, 0, width, canvas.height);
+        }
+
+        // Draw WiFi signal at 2.4 GHz (around 1/3 of the width)
+        drawSignal(canvas.width * 0.33, 0.8, 40);
+
+        // Draw cellular signal at 900 MHz (around 1/6 of the width)
+        drawSignal(canvas.width * 0.15, 0.6, 30);
+
+        // Draw some noise and interference
+        for (let i = 0; i < 50; i++) {
+            const x = Math.random() * canvas.width;
+            const intensity = Math.random() * 0.3;
+            drawSignal(x, intensity, 5);
+        }
+
+        // Add time markers
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '12px Arial';
+        for (let i = 0; i < 10; i++) {
+            const y = (canvas.height / 10) * i;
+            ctx.fillText(`T-${9-i}s`, 10, y + 15);
+        }
+
+        // Add frequency markers
+        for (let i = 0; i < 6; i++) {
+            const x = (canvas.width / 6) * i;
+            ctx.fillText(`${i}GHz`, x, canvas.height - 5);
+        }
+
+        // Save canvas content to a file using fetch
+        canvas.toBlob(async (blob) => {
+            const formData = new FormData();
+            formData.append('file', blob, 'rf_spectrum_sample.png');
+            
+            try {
+                const response = await fetch('server_upload.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                if (result.success) {
+                    document.body.innerHTML += '<p>RF spectrum sample image has been generated and saved.</p>';
+                } else {
+                    document.body.innerHTML += '<p>Error: ' + result.message + '</p>';
+                }
+            } catch (error) {
+                document.body.innerHTML += '<p>Error saving image: ' + error.message + '</p>';
+            }
+        }, 'image/png');
+    </script>
+</body>
+</html>
