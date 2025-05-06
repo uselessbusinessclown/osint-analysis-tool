@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://images.pexels.com; style-src 'self' https://cdnjs.cloudflare.com 'unsafe-inline'; script-src 'self'; font-src 'self' https://cdnjs.cloudflare.com;">
+    <title>Upload Files - OSINT Analysis Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-search-plus"></i>
+                <span>OSINT Analyzer</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="upload.html" class="active"><i class="fas fa-upload"></i> Upload</a></li>
+                <li><a href="results.html"><i class="fas fa-chart-bar"></i> Results</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="upload-page">
+        <section class="upload-container">
+            <h1>Upload Files for Analysis</h1>
+            
+            <form id="uploadForm" enctype="multipart/form-data">
+                <div class="upload-area" id="dropZone">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drag and drop files here or click to select files</p>
+                    <p class="upload-info">Supported formats: JPEG, PNG, PDF, TXT (Max 10MB)</p>
+                    <input type="file" id="fileInput" name="file" multiple 
+                           accept="image/jpeg,image/png,.pdf,.txt" class="file-input">
+                </div>
+
+                <div class="upload-options">
+                    <label class="rf-spectrum-option">
+                        <input type="checkbox" id="rfSpectrum" name="rfSpectrum">
+                        <span>This is an RF Spectrum Image</span>
+                        <i class="fas fa-info-circle" title="Check this if you're uploading an RF waterfall spectrum image for analysis"></i>
+                    </label>
+                </div>
+            </form>
+
+            <div id="uploadProgress" class="upload-progress hidden">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <p class="progress-text">Uploading... 0%</p>
+            </div>
+
+            <div id="filePreview" class="file-preview">
+                <h2>Selected Files</h2>
+                <div class="preview-grid" id="previewGrid"></div>
+            </div>
+
+            <div id="errorMessages" class="error-messages"></div>
+        </section>
+
+        <section class="upload-instructions">
+            <h2>Instructions</h2>
+            <div class="instruction-cards">
+                <div class="instruction-card">
+                    <i class="fas fa-image"></i>
+                    <h3>Images</h3>
+                    <ul>
+                        <li>JPEG and PNG formats supported</li>
+                        <li>Check "RF Spectrum Image" for spectrum analysis</li>
+                        <li>Metadata will be extracted automatically</li>
+                    </ul>
+                </div>
+                <div class="instruction-card">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>Documents</h3>
+                    <ul>
+                        <li>TXT files will be analyzed directly</li>
+                        <li>For PDFs, you'll need to provide text manually</li>
+                        <li>Entity recognition will be performed</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="privacy-notice">
+                <h4>Privacy Notice</h4>
+                <p>Files are processed client-side and temporarily stored server-side. All files are deleted after processing.</p>
+            </div>
+            <div class="contact-info">
+                <h4>Contact</h4>
+                <p>For support: <a href="mailto:support@osintanalyzer.com">support@osintanalyzer.com</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
